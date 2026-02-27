@@ -17,14 +17,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = yaml.Unmarshal(yamlData, &data)
 
-	weekday := time.Now().Weekday().String()
-	_, week := time.Now().ISOWeek()
+	timeNow := time.Now()
+	weekday := timeNow.Weekday().String()
+	_, week := timeNow.ISOWeek()
 	for _, i := range data[weekday] {
 		if i[0] == '0' || int(i[0])-int('0') == week%2+1 {
-			fmt.Fprintf(w, "%v %v\n", i[3:], timetable[i[1]-48])
+			fmt.Fprintf(w, "%v \t%v\n", i[3:], timetable[i[1]-48])
 		}
 
 	}
+	fmt.Fprintf(w, "\n%v", timeNow.Format("2006-01-02 15:04:05"))
 }
 
 var timetable map[byte]string
